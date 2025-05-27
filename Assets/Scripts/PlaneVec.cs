@@ -29,13 +29,13 @@ public class PlaneVec : MonoBehaviour {
         Generate();
         updateMesh();
         
-        transform.LookAt(GetComponentInParent<Overlap>().LinkStars[Overlap.reps].transform);       
+        transform.LookAt(GetComponentInParent<Overlap>().SuitableStars[Overlap.reps].transform);       
     }
 
     void getDistance() {
         //Target Object Loation - Current Star location (in that order)
-        if (GetComponentInParent<Overlap>().LinkStars.Count != 0) {
-            LocalVec = new Vector3((GetComponentInParent<Overlap>().LinkStars[Overlap.reps].transform.position.x - transform.position.x),(GetComponentInParent<Overlap>().LinkStars[Overlap.reps].transform.position.y - transform.position.y),(GetComponentInParent<Overlap>().LinkStars[Overlap.reps].transform.position.z - transform.position.z));
+        if (GetComponentInParent<Overlap>().SuitableStars.Count != 0) {
+            LocalVec = new Vector3((GetComponentInParent<Overlap>().SuitableStars[Overlap.reps].transform.position.x - transform.position.x),(GetComponentInParent<Overlap>().SuitableStars[Overlap.reps].transform.position.y - transform.position.y),(GetComponentInParent<Overlap>().SuitableStars[Overlap.reps].transform.position.z - transform.position.z));
             Distance = (int)MathF.Sqrt((LocalVec.x * LocalVec.x) + (LocalVec.y * LocalVec.y) + (LocalVec.z * LocalVec.z));
         } else {
             Debug.Log("NO Connections");           

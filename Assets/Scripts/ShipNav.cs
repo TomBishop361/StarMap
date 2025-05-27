@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Events;
+using System;
 
 public class ShipNav : MonoBehaviour {
     public UnityEvent RouteFound;
@@ -36,10 +37,13 @@ public class ShipNav : MonoBehaviour {
         //puts in each star from stars.starlist into unvisited star. (UnvisitedStar = Stars.Starlist Caused problems)
         foreach (GameObject Star in Stars.StarList){
             UnvisitedStar.Add(Star);
-        }        
+        }
+        if(VisitedStarsInOrder != null) TogglePath(VisitedStarsInOrder, false);
         VisitedStarsInOrder = new List<GameObject>();        
         VisitedStarsInOrder.Add(transform.parent.gameObject);       
-    }   
+    }
+
+  
 
     public void Search() {
         distance = 0;
@@ -52,7 +56,7 @@ public class ShipNav : MonoBehaviour {
             distance = 0;
             Nearest = 1000;
             //Look through each Linked Star in the List of Linked stars on the Current Star(Parent star)
-            foreach (GameObject LinkStar in VisitedStarsInOrder[i].GetComponent<Overlap>().LinkStars) {
+            foreach (GameObject LinkStar in VisitedStarsInOrder[i].GetComponent<Overlap>().links.Keys) {
                 //Calucluate which star is closest out of all linkedStars                
                 distance = Vector3.Distance(LinkStar.transform.position, TargetDesination.transform.position);
                 // Check if the distance is closer than the previous nearest and if the linkstar has not been visited
@@ -78,6 +82,7 @@ public class ShipNav : MonoBehaviour {
         if (VisitedStarsInOrder.Contains(TargetDesination)) {
             // Visited star list count - 1 = how many jumps to the target planet (Starting Planet does not require a jump)                        
             StringNames.GetComponent<StarSelector>().RouteInfoString("Route found! " + (VisitedStarsInOrder.Count - 1).ToString() + " Jumps To Target");
+            TogglePath(VisitedStarsInOrder,true);
             RouteFound.Invoke(); //Enable Launch button
         } else {
             // If the target destination is not found or route is impossible
@@ -87,6 +92,27 @@ public class ShipNav : MonoBehaviour {
             RouteNotFound.Invoke();//Disable Launch button
         }       
     }
+
+    private void TogglePath(List<GameObject> path, bool setActive)
+    {
+        if(path.Count <= 0) return;
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            GameObject pathGO;
+            path[i].GetComponent<Overlap>().links.TryGetValue(path[i + 1], out pathGO);
+            if (setActive)
+            {
+                pathGO.GetComponent<Renderer>().materials[0].color = Color.green;
+            }
+            else
+            {
+                pathGO.GetComponent<Renderer>().materials[0].color = Color.white;
+            }
+            
+        }        
+    }
+   
+
 
     public void launch() {
         if (lerping == false) {

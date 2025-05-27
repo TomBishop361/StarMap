@@ -25,8 +25,8 @@ public class ManualShipNav : MonoBehaviour
 
     void ListGen(){
         starLinkName = new List<string>();
-        for (int i = 0; i < GetComponentInParent<Overlap>().LinkStars.Count; i++) {
-            starLinkName.Add(GetComponentInParent<Overlap>().LinkStars[i].name);
+        for (int i = 0; i < GetComponentInParent<Overlap>().SuitableStars.Count; i++) {
+            starLinkName.Add(GetComponentInParent<Overlap>().SuitableStars[i].name);
         }
         Destinations.ClearOptions();
         Destinations.AddOptions(starLinkName);
@@ -38,7 +38,7 @@ public class ManualShipNav : MonoBehaviour
 
     public void launch() {
         if (lerping == false) {
-            transform.parent = GetComponentInParent<Overlap>().LinkStars[slctDestination].transform;
+            transform.parent = GetComponentInParent<Overlap>().SuitableStars[slctDestination].transform;
             CurrentVec = transform.localPosition;
             StartCoroutine(LerpFloat());
             ListGen();
