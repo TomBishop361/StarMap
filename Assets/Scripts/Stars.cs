@@ -39,9 +39,9 @@ public class Stars : MonoBehaviour
         for (int i = 0; i < Density; i++){
             Istar = Instantiate(Star, new Vector3(UnityEngine.Random.Range(1, Radius), UnityEngine.Random.Range(1, Radius), UnityEngine.Random.Range(1, Radius)), Quaternion.identity);
             //Goes through the enum of Star names and assigns them to each star as they are created.
-            foreach (int j in Enum.GetValues(typeof(EnumOfStars.StarNames))){
-                Istar.transform.name = Enum.GetName(typeof(EnumOfStars.StarNames), i);
-            }
+
+            Istar.transform.name = ListOfStars.StarNames[UnityEngine.Random.Range(0,ListOfStars.StarNames.Length-1)];
+
             //add all stars into a list
             StarList.Add(Istar);
         }
